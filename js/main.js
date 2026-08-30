@@ -13,15 +13,19 @@ const CAMPAIGN = {
 // cobra en la moneda local real del comprador). Se detecta vía
 // /api/geo (función serverless en Vercel, gratis y sin límites).
 // ============================================================
+// Nota: los simbolos de moneda usan escapes Unicode (£, €) en vez
+// del caracter literal, para que el archivo funcione igual sin importar con
+// que codificacion GitHub/Vercel terminen sirviendolo (evita el bug de
+// caracteres corruptos que puede aparecer con el simbolo literal).
 const CURRENCY_BY_COUNTRY = {
-  GB: { symbol: "£", suffix: "", isoCode: "GBP" },
-  IE: { symbol: "€", suffix: "", isoCode: "EUR" },
-  ES: { symbol: "€", suffix: "", isoCode: "EUR" },
+  GB: { symbol: "\u00A3", suffix: "", isoCode: "GBP" },
+  IE: { symbol: "\u20AC", suffix: "", isoCode: "EUR" },
+  ES: { symbol: "\u20AC", suffix: "", isoCode: "EUR" },
   US: { symbol: "$", suffix: "", isoCode: "USD" },
   CA: { symbol: "$", suffix: "", isoCode: "CAD" },
   AU: { symbol: "$", suffix: "", isoCode: "AUD" }
 };
-const DEFAULT_CURRENCY = { symbol: "£", suffix: "", isoCode: "GBP" };
+const DEFAULT_CURRENCY = { symbol: "\u00A3", suffix: "", isoCode: "GBP" };
 let ACTIVE_CURRENCY = DEFAULT_CURRENCY;
 
 // ============================================================
@@ -107,7 +111,7 @@ function showToast(msg) {
 async function shareCampaign() {
   const shareData = {
     title: CAMPAIGN.title,
-    text: CAMPAIGN.title + " — every contribution counts 🥑",
+    text: CAMPAIGN.title + " \u2014 every contribution counts \u{1F951}",
     url: window.location.origin + window.location.pathname.replace(/donar\.html$/, "index.html")
   };
   if (navigator.share) {
@@ -115,7 +119,7 @@ async function shareCampaign() {
     catch (e) { /* usuario canceló, no hacemos nada */ }
   } else if (navigator.clipboard) {
     await navigator.clipboard.writeText(shareData.url);
-    showToast("Link copied 📋");
+    showToast("Link copied \u{1F4CB}");
   }
 }
 
