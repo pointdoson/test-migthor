@@ -60,13 +60,22 @@ function refreshAmountLabels() {
 
 // Detecta el país del visitante y aplica la moneda correspondiente.
 async function initCurrencyByCountry() {
-  try {
-    const res = await fetch("/api/geo");
-    const data = await res.json();
-    const match = CURRENCY_BY_COUNTRY[data.country];
+  // Modo de prueba: ?debugCountry=CA fuerza el país sin depender de VPN
+  // ni de la función serverless. Ejemplos: ?debugCountry=US, =AU, =IE, =GB
+  const debugCountry = new URLSearchParams(window.location.search).get("debugCountry");
+
+  if (debugCountry) {
+    const match = CURRENCY_BY_COUNTRY[debugCountry.toUpperCase()];
     if (match) ACTIVE_CURRENCY = match;
-  } catch (e) {
-    // si falla la detección, se queda con la moneda por defecto (£)
+  } else {
+    try {
+      const res = await fetch("/api/geo");
+      const data = await res.json();
+      const match = CURRENCY_BY_COUNTRY[data.country];
+      if (match) ACTIVE_CURRENCY = match;
+    } catch (e) {
+      // si falla la detección, se queda con la moneda por defecto (£)
+    }
   }
 
   initDonut();
