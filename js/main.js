@@ -17,9 +17,9 @@ const CURRENCY_BY_COUNTRY = {
   GB: { symbol: "£", suffix: "", isoCode: "GBP" },
   IE: { symbol: "€", suffix: "", isoCode: "EUR" },
   ES: { symbol: "€", suffix: "", isoCode: "EUR" },
-  US: { symbol: "$", suffix: " USD", isoCode: "USD" },
-  CA: { symbol: "$", suffix: " CAD", isoCode: "CAD" },
-  AU: { symbol: "$", suffix: " AUD", isoCode: "AUD" }
+  US: { symbol: "$", suffix: "", isoCode: "USD" },
+  CA: { symbol: "$", suffix: "", isoCode: "CAD" },
+  AU: { symbol: "$", suffix: "", isoCode: "AUD" }
 };
 const DEFAULT_CURRENCY = { symbol: "£", suffix: "", isoCode: "GBP" };
 let ACTIVE_CURRENCY = DEFAULT_CURRENCY;
@@ -59,6 +59,15 @@ function refreshAmountLabels() {
   });
 }
 
+// Actualiza los importes de la lista de donaciones (index.html)
+function refreshDonationAmounts() {
+  document.querySelectorAll(".donation-amount[data-amount]").forEach((el) => {
+    const amt = parseFloat(el.dataset.amount);
+    const formatted = Number.isInteger(amt) ? amt.toString() : amt.toFixed(2);
+    el.textContent = ACTIVE_CURRENCY.symbol + formatted + ACTIVE_CURRENCY.suffix;
+  });
+}
+
 // Detecta el país del visitante y aplica la moneda correspondiente.
 async function initCurrencyByCountry() {
   // Modo de prueba: ?debugCountry=CA fuerza el país sin depender de VPN
@@ -83,6 +92,7 @@ async function initCurrencyByCountry() {
   initSummaryBar();
   refreshGoalTexts();
   refreshAmountLabels();
+  refreshDonationAmounts();
 }
 
 function showToast(msg) {
