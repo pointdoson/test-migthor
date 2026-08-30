@@ -16,6 +16,7 @@ const CAMPAIGN = {
 const CURRENCY_BY_COUNTRY = {
   GB: { symbol: "£", suffix: "", isoCode: "GBP" },
   IE: { symbol: "€", suffix: "", isoCode: "EUR" },
+  ES: { symbol: "€", suffix: "", isoCode: "EUR" },
   US: { symbol: "$", suffix: " USD", isoCode: "USD" },
   CA: { symbol: "$", suffix: " CAD", isoCode: "CAD" },
   AU: { symbol: "$", suffix: " AUD", isoCode: "AUD" }
